@@ -5,7 +5,7 @@
     <img alt="npm" src="https://img.shields.io/npm/v/nest-nsq-transport" />
   </a>
   <a href="https://github.com/iamolegga/nest-nsq-transport/actions">
-    <img alt="GitHub branch checks state" src="https://badgen.net/github/checks/iamolegga/nest-nsq-transport">
+    <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/iamolegga/nest-nsq-transport/on-push.yml?branch=main">
   </a>
   <a href="https://codeclimate.com/github/iamolegga/nest-nsq-transport/test_coverage">
     <img src="https://api.codeclimate.com/v1/badges/275a42d99fb390a6b2e2/test_coverage" />

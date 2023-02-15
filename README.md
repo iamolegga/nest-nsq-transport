@@ -8,7 +8,7 @@
     <img alt="GitHub branch checks state" src="https://badgen.net/github/checks/iamolegga/nest-nsq-transport">
   </a>
   <a href="https://codeclimate.com/github/iamolegga/nest-nsq-transport/test_coverage">
-    <img src="https://api.codeclimate.com/v1/badges/<ADD_ID_HERE>/test_coverage" />
+    <img src="https://api.codeclimate.com/v1/badges/275a42d99fb390a6b2e2/test_coverage" />
   </a>
   <a href="https://snyk.io/test/github/iamolegga/nest-nsq-transport">
     <img alt="Snyk Vulnerabilities for npm package" src="https://img.shields.io/snyk/vulnerabilities/npm/nest-nsq-transport" />

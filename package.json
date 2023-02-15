@@ -1,0 +1,75 @@
+{
+  "name": "nest-nsq-transport",
+  "version": "0.1.0",
+  "description": "NestJS microservice transport for NSQ",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --verbose -i --detectOpenHandles",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "lint": "tsc --noemit && eslint \"{src,__tests__}/**/*.ts\" --fix",
+    "prebuild": "rimraf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "example": "ts-node ./example/main",
+    "prepublishOnly": "npm run build && cp -r ./dist/* .",
+    "postpublish": "git clean -fd",
+    "nsqd": "docker run --rm -p 4150:4150 -p 4151:4151 iamolegga/nsqd"
+  },
+  "files": [
+    "*.{js,d.ts}",
+    "!jest.config.js",
+    "!.eslintrc.js"
+  ],
+  "engineStrict": true,
+  "engines": {
+    "node": ">= 14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamolegga/nest-nsq-transport.git"
+  },
+  "keywords": [
+    "nest",
+    "nestjs",
+    "nsq",
+    "transport",
+    "microservice"
+  ],
+  "author": "iamolegga <iamolegga@gmail.com> (http://github.com/iamolegga)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iamolegga/nest-nsq-transport/issues"
+  },
+  "homepage": "https://github.com/iamolegga/nest-nsq-transport#readme",
+  "devDependencies": {
+    "@nestjs/common": "^9.0.5",
+    "@nestjs/core": "^9.0.5",
+    "@nestjs/microservices": "^9.0.5",
+    "@testdeck/jest": "^0.3.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^14.18.22",
+    "@types/nsqjs": "^0.12.1",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^27.5.1",
+    "nsqjs": "^0.13.0",
+    "prettier": "^2.7.1",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^4.0.4",
+    "rxjs": "^7.5.6",
+    "ts-jest": "^27.1.5",
+    "ts-loader": "^9.3.1",
+    "ts-node": "^10.9.1",
+    "tslint": "^6.1.3",
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0 || ^9.0.0",
+    "@nestjs/microservices": "^8.0.0 || ^9.0.0",
+    "nsqjs": "^0.13.0"
+  }
+}

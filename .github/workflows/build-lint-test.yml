@@ -1,0 +1,52 @@
+name: build-lint-test
+
+on:
+  workflow_call:
+
+env:
+  NSQD_TCP_URL: 127.0.0.1:4150
+  NSQD_HTTP_URL: http://127.0.0.1:4151
+
+jobs:
+  build-lint-test:
+    strategy:
+      fail-fast: true
+      matrix:
+        nestjs-version:
+          - "8"
+          - "9"
+        nodejs-version:
+          - 14
+          - 16
+          - 18
+
+    runs-on: ubuntu-latest
+
+    services:
+      nsqd:
+        image: iamolegga/nsqd
+        ports:
+          - 4150:4150
+          - 4151:4151
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.nodejs-version }}
+      - run: npm ci
+      - run: |
+          npm i @nestjs/core@${{ matrix.nestjs-version }} \
+                @nestjs/common@${{ matrix.nestjs-version }} \
+                @nestjs/microservices@${{ matrix.nestjs-version }} \
+                @types/node@${{ matrix.nodejs-version }} \
+                -D
+      - run: npm run lint
+      - uses: actions/cache@v3
+        with:
+          path: coverage
+          key: ${{ github.sha }}-${{ matrix.nestjs-version }}-${{ matrix.nodejs-version }}
+      - run: npm t
+      - run: npm run build

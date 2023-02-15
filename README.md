@@ -4,7 +4,7 @@
   <a href="https://www.npmjs.com/package/nest-nsq-transport">
     <img alt="npm" src="https://img.shields.io/npm/v/nest-nsq-transport" />
   </a>
-  <a href="https://github.com/iamolegga/nest-nsq-transport/actions">
+  <a href="https://github.com/iamolegga/nest-nsq-transport/actions/workflows/on-push.yml?query=branch%3Amain">
     <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/iamolegga/nest-nsq-transport/on-push.yml?branch=main">
   </a>
   <a href="https://codeclimate.com/github/iamolegga/nest-nsq-transport/test_coverage">
@@ -16,7 +16,8 @@
   <a href="https://libraries.io/npm/nest-nsq-transport">
     <img alt="Libraries.io" src="https://img.shields.io/librariesio/release/npm/nest-nsq-transport">
   </a>
-  <img alt="Dependabot" src="https://badgen.net/github/dependabot/iamolegga/nest-nsq-transport">
+  <img alt="Dependabot" src="https://badgen.net/github/dependabot/iamolegga/nest-nsq-transport" />
+  <img alt="Installs" src="https://img.shields.io/npm/dm/nest-nsq-transport" />
 </p>
 
 The most basic and unopinionated implementation of [NSQ](https://nsq.io/) transport for NestJS microservices.
@@ -179,3 +180,7 @@ class TestController {
   }
 }
 ```
+
+<h2 align="center">Do you use this library?<br/>Don't be shy to give it a star! ★</h2>
+
+<h3 align="center">Also if you are into NestJS you might be interested in one of my <a href="https://github.com/iamolegga#nestjs">other NestJS libs</a>.</h3>

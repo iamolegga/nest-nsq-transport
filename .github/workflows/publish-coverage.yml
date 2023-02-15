@@ -18,9 +18,8 @@ jobs:
           # restore cache from build-lint-test wf with key=sha-(oneof nestjs version)-(oneof nodejs version)
           key: ${{ github.sha }}-8-18
 
-      # uncomment when will be public and added to code climate
-      # - uses: paambaati/codeclimate-action@v2.7.5
-      #   with:
-      #     coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
-      #   env:
-      #     CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_REPORTER_ID }}
+      - uses: paambaati/codeclimate-action@v2.7.5
+        with:
+          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_REPORTER_ID }}

@@ -1,6 +1,6 @@
 {
   "name": "nest-nsq-transport",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "NestJS microservice transport for NSQ",
   "main": "index.js",
   "scripts": {

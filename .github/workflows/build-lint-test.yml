@@ -15,10 +15,11 @@ jobs:
         nestjs-version:
           - "8"
           - "9"
+          - "10"
         nodejs-version:
-          - 14
           - 16
           - 18
+          - 20
 
     runs-on: ubuntu-latest
 

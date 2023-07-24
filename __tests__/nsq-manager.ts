@@ -32,6 +32,7 @@ export class NSQManager {
           resolve();
         }
       });
+      req.shouldKeepAlive = false;
       req.on('error', reject);
       req.end();
     });

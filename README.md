@@ -4,14 +4,11 @@
   <a href="https://www.npmjs.com/package/nest-nsq-transport">
     <img alt="npm" src="https://img.shields.io/npm/v/nest-nsq-transport" />
   </a>
-  <a href="https://github.com/iamolegga/nest-nsq-transport/actions/workflows/on-push.yml?query=branch%3Amain">
-    <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/iamolegga/nest-nsq-transport/on-push.yml?branch=main">
+  <a href="https://github.com/iamolegga/nest-nsq-transport/actions/workflows/on-push-main.yml?query=branch%3Amain">
+    <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/iamolegga/nest-nsq-transport/on-push-main.yml?branch=main">
   </a>
   <a href="https://codeclimate.com/github/iamolegga/nest-nsq-transport/test_coverage">
     <img src="https://api.codeclimate.com/v1/badges/275a42d99fb390a6b2e2/test_coverage" />
-  </a>
-  <a href="https://snyk.io/test/github/iamolegga/nest-nsq-transport">
-    <img alt="Snyk Vulnerabilities for npm package" src="https://img.shields.io/snyk/vulnerabilities/npm/nest-nsq-transport" />
   </a>
   <a href="https://libraries.io/npm/nest-nsq-transport">
     <img alt="Libraries.io" src="https://img.shields.io/librariesio/release/npm/nest-nsq-transport">

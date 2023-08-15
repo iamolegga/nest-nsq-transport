@@ -4,6 +4,9 @@
   <a href="https://www.npmjs.com/package/nest-nsq-transport">
     <img alt="npm" src="https://img.shields.io/npm/v/nest-nsq-transport" />
   </a>
+  <a href="https://www.npmjs.com/package/nest-nsq-transport">
+    <img alt="npm" src="https://img.shields.io/npm/dm/nest-nsq-transport" />
+  </a>
   <a href="https://github.com/iamolegga/nest-nsq-transport/actions/workflows/on-push-main.yml?query=branch%3Amain">
     <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/iamolegga/nest-nsq-transport/on-push-main.yml?branch=main">
   </a>

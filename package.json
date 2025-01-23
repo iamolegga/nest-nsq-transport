@@ -42,7 +42,7 @@
   "homepage": "https://github.com/iamolegga/nest-nsq-transport#readme",
   "devDependencies": {
     "@nestjs/common": "^10.1.1",
-    "@nestjs/core": "^10.1.1",
+    "@nestjs/core": "^11.0.4",
     "@nestjs/microservices": "^10.1.1",
     "@testdeck/jest": "^0.3.3",
     "@types/jest": "^29.5.3",

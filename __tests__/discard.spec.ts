@@ -44,16 +44,16 @@ export class Discard extends Base {
         wg.done();
       }
 
-      async emit1() {
-        wg.add(2);
-        await this.client.emit('topic-discard-1', data).toPromise();
-      }
-
       @EventPattern('topic-discard-2/channel-discard-2')
       handle2(@Payload() event: unknown, @Ctx() ctx: NSQContext) {
         expect(event).toBe(data);
         wg.done();
         if (ctx.message.attempts === 1) throw new Error('requeue');
+      }
+
+      async emit1() {
+        wg.add(2);
+        await this.client.emit('topic-discard-1', data).toPromise();
       }
 
       async emit2() {

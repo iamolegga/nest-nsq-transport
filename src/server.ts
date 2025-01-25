@@ -9,6 +9,7 @@ import {
 import { Message, Reader, ReaderConnectionConfigOptions } from 'nsqjs';
 
 import { NSQContext } from './context';
+import { Deferred } from './deferred';
 import { RPCNotSupported } from './errors';
 import { invariant } from './invariant';
 import { NSQPattern } from './pattern';
@@ -33,6 +34,7 @@ export class NSQStrategy extends Server implements CustomTransportStrategy {
   protected readonly logger = new Logger(NSQStrategy.name);
   private readonly readers = new Map<string, Reader>();
   private readonly handlingMessagesWG = new WaitGroup();
+  private readonly readersSetDeferred = new Deferred();
 
   constructor(private readonly opts: NSQStrategyOptions) {
     super();
@@ -40,6 +42,7 @@ export class NSQStrategy extends Server implements CustomTransportStrategy {
   }
 
   async listen(callback?: () => void) {
+    this.readersSetDeferred.resolve();
     await Promise.all(
       [...this.readers.values()].map(
         (reader) =>
@@ -89,6 +92,25 @@ export class NSQStrategy extends Server implements CustomTransportStrategy {
     for (const reader of this.readers.values()) {
       reader.close();
     }
+  }
+
+  on<
+    EventKey extends string = string,
+    // use same types as in parent class
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    EventCallback extends Function = Function,
+  >(event: EventKey, callback: EventCallback) {
+    void this.readersSetDeferred.promise.then(() => {
+      this.readers.forEach((reader) => {
+        // @ts-expect-error FIXME later
+        reader.on(event, callback);
+      });
+    });
+  }
+
+  // we have multiple underlying readers, so we return all of them
+  unwrap<T>(): T {
+    return this.readers as T;
   }
 
   private createOrGetReaderFor(pattern: NSQPattern): Reader {

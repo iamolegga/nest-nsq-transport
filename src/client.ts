@@ -94,4 +94,9 @@ export class NSQClient extends ClientProxy {
       ),
     );
   }
+
+  // we have multiple underlying writers, so we return all of them
+  unwrap<T>(): T {
+    return this.writer as T;
+  }
 }

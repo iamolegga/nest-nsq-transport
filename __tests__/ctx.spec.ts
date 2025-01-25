@@ -26,7 +26,6 @@ export class ContextSuite extends Base {
       handle(@Payload() event: unknown, @Ctx() ctx: NSQContext) {
         expect(ctx.message).toBeInstanceOf(Message);
         expect(ctx.pattern).toMatchObject(
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           NSQPattern.parse('topic-ctx/channel-ctx')!,
         );
         expect(event).toEqual(data);

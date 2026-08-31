@@ -1,13 +1,11 @@
 import { Controller, Inject, ModuleMetadata, Type } from '@nestjs/common';
 import { ClientProxy, EventPattern } from '@nestjs/microservices';
-import { suite, test, timeout } from '@testdeck/jest';
 
 import { NSQPattern, NSQStrategy } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class HandleError extends Base {
+class HandleError extends Base {
   patterns = [new NSQPattern('topic-handle-error', 'channel-handle-error')];
   strategy = new NSQStrategy({
     defaultChannelOptions: {
@@ -49,10 +47,18 @@ export class HandleError extends Base {
     return { ...super.metadata, controllers: [TestController] };
   }
 
-  @test
-  @timeout(10000)
-  async 'should throw error and retry again same message'() {
+  async emitAndWait() {
     await this.app.get(this.ctrl).emit();
     await this.wg.wait();
   }
 }
+
+describe('HandleError', () => {
+  const getSuite = useSuite(() => new HandleError());
+
+  it('should throw error and retry again same message', {
+    timeout: 10000,
+  }, async () => {
+    await getSuite().emitAndWait();
+  });
+});

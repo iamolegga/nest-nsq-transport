@@ -1,13 +1,11 @@
 import { Controller, ModuleMetadata } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { suite, test } from '@testdeck/jest';
 
 import { NSQPattern } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class MsgPatternHandler extends Base {
+class MsgPatternHandler extends Base {
   patterns = [new NSQPattern('topic-msg', 'channel-msg')];
   awaitListeningInBeforeHook = false;
 
@@ -21,8 +19,15 @@ export class MsgPatternHandler extends Base {
     return { ...super.metadata, controllers: [TestController] };
   }
 
-  @test
-  async 'should throw on start'() {
+  async expectListeningToReject() {
     await expect(this.listening.promise).rejects.toBeTruthy();
   }
 }
+
+describe('MsgPatternHandler', () => {
+  const getSuite = useSuite(() => new MsgPatternHandler());
+
+  it('should throw on start', async () => {
+    await getSuite().expectListeningToReject();
+  });
+});

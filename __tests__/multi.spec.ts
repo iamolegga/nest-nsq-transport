@@ -4,14 +4,12 @@ import {
   ClientsModule,
   EventPattern,
 } from '@nestjs/microservices';
-import { suite, test } from '@testdeck/jest';
 
 import { NSQClient, NSQClientOpitons, NSQPattern } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class Multi extends Base {
+class Multi extends Base {
   patterns = [
     new NSQPattern('topic-multi', 'channel-multi-1'),
     new NSQPattern('topic-multi', 'channel-multi-2'),
@@ -68,9 +66,16 @@ export class Multi extends Base {
     };
   }
 
-  @test
-  async 'should send and receive same data in two channels'() {
+  async emitAndWait() {
     await this.app.get(this.ctrl).emit();
     await this.wg.wait();
   }
 }
+
+describe('Multi', () => {
+  const getSuite = useSuite(() => new Multi());
+
+  it('should send and receive same data in two channels', async () => {
+    await getSuite().emitAndWait();
+  });
+});

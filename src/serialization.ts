@@ -1,8 +1,8 @@
 import {
   ConsumerDeserializer,
-  ProducerSerializer,
   IncomingEvent,
   OutgoingEvent,
+  ProducerSerializer,
 } from '@nestjs/microservices';
 import { Message } from 'nsqjs';
 

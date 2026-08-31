@@ -1,13 +1,11 @@
 import { Controller, Inject, ModuleMetadata, Type } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { suite, test } from '@testdeck/jest';
 
 import { NSQPattern } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class Pattern extends Base {
+class Pattern extends Base {
   patterns = [new NSQPattern('topic-pattern', 'channel-pattern')];
 
   private ctrl!: Type<{ emit(): Promise<void> }>;
@@ -30,8 +28,15 @@ export class Pattern extends Base {
     return { ...super.metadata, controllers: [TestController] };
   }
 
-  @test
-  async 'pattern should be only string'() {
+  async expectEmitToReject() {
     await expect(this.app.get(this.ctrl).emit()).rejects.toBeTruthy();
   }
 }
+
+describe('Pattern', () => {
+  const getSuite = useSuite(() => new Pattern());
+
+  it('pattern should be only string', async () => {
+    await getSuite().expectEmitToReject();
+  });
+});

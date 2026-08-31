@@ -1,14 +1,12 @@
 import { Controller, Inject, ModuleMetadata, Type } from '@nestjs/common';
 import { ClientProxy, Ctx, EventPattern, Payload } from '@nestjs/microservices';
-import { suite, test } from '@testdeck/jest';
 import { Message } from 'nsqjs';
 
 import { NSQContext, NSQPattern } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class ContextSuite extends Base {
+class ContextSuite extends Base {
   patterns = [new NSQPattern('topic-ctx', 'channel-ctx')];
 
   private ctrl!: Type<{ emit(): Promise<void> }>;
@@ -22,10 +20,15 @@ export class ContextSuite extends Base {
     class TestController {
       constructor(@Inject(token) private readonly client: ClientProxy) {}
 
-      @EventPattern('topic-ctx/channel-ctx')
+      // the explicit `<string>` picks NestJS 12's plain `MethodDecorator`
+      // overload; the typed-events one it would otherwise resolve to declares
+      // every parameter after the payload as `unknown`, so a `@Ctx()` one
+      // cannot be typed
+      @EventPattern<string>('topic-ctx/channel-ctx')
       handle(@Payload() event: unknown, @Ctx() ctx: NSQContext) {
         expect(ctx.message).toBeInstanceOf(Message);
         expect(ctx.pattern).toMatchObject(
+          // biome-ignore lint/style/noNonNullAssertion: the literal is a well-formed pattern, so `parse` cannot return null for it
           NSQPattern.parse('topic-ctx/channel-ctx')!,
         );
         expect(event).toEqual(data);
@@ -43,8 +46,7 @@ export class ContextSuite extends Base {
     return { ...super.metadata, controllers: [TestController] };
   }
 
-  @test
-  async 'context shoud have original message and pattern'() {
+  async emitAndWait() {
     await this.app.get(this.ctrl).emit();
     await this.wg.wait();
   }
@@ -53,3 +55,11 @@ export class ContextSuite extends Base {
     await this.app.close();
   }
 }
+
+describe('ContextSuite', () => {
+  const getSuite = useSuite(() => new ContextSuite());
+
+  it('context shoud have original message and pattern', async () => {
+    await getSuite().emitAndWait();
+  });
+});

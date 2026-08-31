@@ -1,4 +1,4 @@
-import { request } from 'http';
+import { request } from 'node:http';
 
 export class NSQManager {
   constructor(private nsqdUrl: string) {}

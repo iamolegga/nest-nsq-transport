@@ -4,26 +4,24 @@ import {
   ClientsModule,
   EventPattern,
 } from '@nestjs/microservices';
-import { suite, test } from '@testdeck/jest';
 
 import {
   JSONDeserializer,
   JSONSerializer,
   NSQClient,
   NSQClientOpitons,
-  NSQStrategy,
   NSQPattern,
+  NSQStrategy,
 } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class Options extends Base {
+class Options extends Base {
   strategy = new NSQStrategy({
     defaultChannelOptions: { nsqdTCPAddresses: [Base.nsqdTCP] },
     channels: {
-      ['topic-opts']: {
-        ['channel-opts']: {
+      'topic-opts': {
+        'channel-opts': {
           name: 'test',
           requeueParams: [1, false],
         },
@@ -76,9 +74,16 @@ export class Options extends Base {
     };
   }
 
-  @test
-  async 'options should be used'() {
+  async emitAndWait() {
     await this.app.get(this.ctrl).emit();
     await this.wg.wait();
   }
 }
+
+describe('Options', () => {
+  const getSuite = useSuite(() => new Options());
+
+  it('options should be used', async () => {
+    await getSuite().emitAndWait();
+  });
+});

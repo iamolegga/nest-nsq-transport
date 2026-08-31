@@ -1,13 +1,11 @@
 import { Controller, Inject, ModuleMetadata, Type } from '@nestjs/common';
 import { ClientProxy, Ctx, EventPattern, Payload } from '@nestjs/microservices';
-import { suite, test } from '@testdeck/jest';
 
 import { NSQContext, NSQPattern, NSQStrategy } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class Discard extends Base {
+class Discard extends Base {
   patterns = [
     new NSQPattern('topic-discard-1', 'channel-discard-1'),
     new NSQPattern('topic-discard-2', 'channel-discard-2'),
@@ -44,7 +42,8 @@ export class Discard extends Base {
         wg.done();
       }
 
-      @EventPattern('topic-discard-2/channel-discard-2')
+      // see the note in ctx.spec.ts on the explicit `<string>`
+      @EventPattern<string>('topic-discard-2/channel-discard-2')
       handle2(@Payload() event: unknown, @Ctx() ctx: NSQContext) {
         expect(event).toBe(data);
         wg.done();
@@ -67,15 +66,25 @@ export class Discard extends Base {
     return { ...super.metadata, controllers: [TestController] };
   }
 
-  @test
-  async 'message goes to discard handler'() {
+  async emit1AndWait() {
     await this.app.get(this.ctrl).emit1();
     await this.wg.wait();
   }
 
-  @test
-  async 'message goes to same handler when no discard handler'() {
+  async emit2AndWait() {
     await this.app.get(this.ctrl).emit2();
     await this.wg.wait();
   }
 }
+
+describe('Discard', () => {
+  const getSuite = useSuite(() => new Discard());
+
+  it('message goes to discard handler', async () => {
+    await getSuite().emit1AndWait();
+  });
+
+  it('message goes to same handler when no discard handler', async () => {
+    await getSuite().emit2AndWait();
+  });
+});

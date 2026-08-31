@@ -7,17 +7,19 @@
   <a href="https://www.npmjs.com/package/nest-nsq-transport">
     <img alt="npm" src="https://img.shields.io/npm/dm/nest-nsq-transport" />
   </a>
-  <a href="https://github.com/iamolegga/nest-nsq-transport/actions/workflows/on-push-main.yml?query=branch%3Amain">
-    <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/iamolegga/nest-nsq-transport/on-push-main.yml?branch=main">
+  <a href="https://github.com/iamolegga/nest-nsq-transport/actions">
+    <img alt="GitHub branch checks state" src="https://badgen.net/github/checks/iamolegga/nest-nsq-transport/main">
   </a>
-  <a href="https://codeclimate.com/github/iamolegga/nest-nsq-transport/test_coverage">
-    <img src="https://api.codeclimate.com/v1/badges/275a42d99fb390a6b2e2/test_coverage" />
+  <a href="https://qlty.sh/gh/iamolegga/projects/nest-nsq-transport">
+    <img src="https://qlty.sh/gh/iamolegga/projects/nest-nsq-transport/coverage.svg" alt="Code Coverage" />
+  </a>
+  <a href="https://snyk.io/test/github/iamolegga/nest-nsq-transport">
+    <img alt="Known Vulnerabilities" src="https://snyk.io/test/github/iamolegga/nest-nsq-transport/badge.svg" />
   </a>
   <a href="https://libraries.io/npm/nest-nsq-transport">
     <img alt="Libraries.io" src="https://img.shields.io/librariesio/release/npm/nest-nsq-transport">
   </a>
-  <img alt="Dependabot" src="https://badgen.net/github/dependabot/iamolegga/nest-nsq-transport" />
-  <img alt="Installs" src="https://img.shields.io/npm/dm/nest-nsq-transport" />
+  <img alt="Dependabot" src="https://badgen.net/github/dependabot/iamolegga/nest-nsq-transport">
 </p>
 
 The most basic and unopinionated implementation of [NSQ](https://nsq.io/) transport for NestJS microservices.
@@ -27,6 +29,15 @@ The most basic and unopinionated implementation of [NSQ](https://nsq.io/) transp
 ---
 
 <p align="center"><b>No request-response messaging support and it won't be added, as it's better to use appropriate RPC transports</b></p>
+
+---
+
+<p align="center"><b>This is the documentation for v0.4. Compatibility with earlier versions:</b></p>
+
+| nest-nsq-transport | NestJS       | Node.js |
+| ------------------ | ------------ | ------- |
+| v0.4               | 11, 12       | >=22.12 |
+| [v0.3](https://github.com/iamolegga/nest-nsq-transport/tree/0.3.0#readme) | 8, 9, 10, 11 | >=18 |
 
 ---
 
@@ -146,8 +157,11 @@ class TestController {
     //
   }
 
-  // Decorators are required to get context
-  @EventPattern('my-topic/my-channel-two')
+  // Decorators are required to get context. On NestJS 12 the explicit
+  // `<string>` is needed too: without it `@EventPattern` resolves to the
+  // typed-events overload, which declares every handler parameter after the
+  // payload as `unknown`, so a `@Ctx()` one cannot be typed.
+  @EventPattern<string>('my-topic/my-channel-two')
   async handle(
     @Payload() payload: MyType,
     @Ctx() ctx: NSQContext
@@ -168,7 +182,7 @@ class TestController {
   // such separate discard-handler is not provided then discarded message will
   // be sent to the original handler again. But it's always possible to check
   // current attempt with `ctx.message.attempts`, which starts from 1.
-  @EventPattern('my-topic/my-channel/discard')
+  @EventPattern<string>('my-topic/my-channel/discard')
   async handle(
     @Payload() payload: MyType,
     @Ctx() ctx: NSQContext

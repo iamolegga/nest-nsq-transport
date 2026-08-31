@@ -1,13 +1,11 @@
 import { Controller, Inject, ModuleMetadata, Type } from '@nestjs/common';
 import { ClientProxy, EventPattern } from '@nestjs/microservices';
-import { suite, test } from '@testdeck/jest';
 
 import { NSQPattern } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class Wrong extends Base {
+class Wrong extends Base {
   patterns = [new NSQPattern('topic-wrong', 'channel-wrong')];
 
   private ctrl!: Type<{ emit(): Promise<void> }>;
@@ -44,9 +42,16 @@ export class Wrong extends Base {
     return { ...super.metadata, controllers: [TestController] };
   }
 
-  @test
-  async 'should send and receive same data'() {
+  async emitAndWait() {
     await this.app.get(this.ctrl).emit();
     await this.wg.wait();
   }
 }
+
+describe('Wrong', () => {
+  const getSuite = useSuite(() => new Wrong());
+
+  it('should send and receive same data', async () => {
+    await getSuite().emitAndWait();
+  });
+});

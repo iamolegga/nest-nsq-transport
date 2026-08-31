@@ -1,12 +1,12 @@
 import { Logger } from '@nestjs/common';
 import {
   ClientProxy,
-  ReadPacket,
-  WritePacket,
   OutgoingEvent,
+  ReadPacket,
   Serializer,
+  WritePacket,
 } from '@nestjs/microservices';
-import { Writer, ConnectionConfigOptions } from 'nsqjs';
+import { ConnectionConfigOptions, Writer } from 'nsqjs';
 
 import { RPCNotSupported } from './errors';
 import { invariant } from './invariant';
@@ -23,7 +23,7 @@ export class NSQClient extends ClientProxy {
   private readonly logger = new Logger(NSQClient.name);
   private connected?: Promise<void>;
 
-  constructor(private readonly opts: NSQClientOpitons) {
+  constructor(opts: NSQClientOpitons) {
     super();
 
     if ('nsqdURL' in opts) {
@@ -80,8 +80,7 @@ export class NSQClient extends ClientProxy {
     throw new RPCNotSupported();
   }
 
-  // something with types, unable to set void
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: `ClientProxy.dispatchEvent` is declared as `Promise<any>` upstream, and narrowing it to `Promise<void>` here makes the override incompatible with the base class
   async dispatchEvent(packet: ReadPacket<unknown>): Promise<any> {
     invariant(
       typeof packet.pattern === 'string',

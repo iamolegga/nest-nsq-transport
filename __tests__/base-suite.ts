@@ -7,7 +7,7 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { ClientsModule } from '@nestjs/microservices';
 
-import { NSQClient, NSQClientOpitons, NSQStrategy, NSQPattern } from '../src';
+import { NSQClient, NSQClientOpitons, NSQPattern, NSQStrategy } from '../src';
 import { Deferred } from '../src/deferred';
 import { invariant } from '../src/invariant';
 import { WaitGroup } from '../src/wait-group';
@@ -100,6 +100,26 @@ export abstract class Base {
       await this.manager.deleteTopic(pattern.topic).catch(noop);
     }
   }
+}
+
+/**
+ * Wires a `Base` subclass into vitest's lifecycle the way the `@testdeck`
+ * `@suite` decorator used to: a fresh instance per test, `before` as
+ * `beforeEach` and `after` as `afterEach`.
+ */
+export function useSuite<T extends Base>(factory: () => T): () => T {
+  let instance: T;
+
+  beforeEach(async () => {
+    instance = factory();
+    await instance.before();
+  });
+
+  afterEach(async () => {
+    await instance.after();
+  });
+
+  return () => instance;
 }
 
 function noop() {}

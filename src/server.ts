@@ -1,10 +1,10 @@
 import { Logger } from '@nestjs/common';
 import {
   CustomTransportStrategy,
-  MessageHandler,
-  Server,
   Deserializer,
   IncomingEvent,
+  MessageHandler,
+  Server,
 } from '@nestjs/microservices';
 import { Message, Reader, ReaderConnectionConfigOptions } from 'nsqjs';
 
@@ -65,10 +65,12 @@ export class NSQStrategy extends Server implements CustomTransportStrategy {
     extras?: Record<string, unknown>,
   ): void {
     const parsed = NSQPattern.parse(pattern);
-    if (!parsed)
-      return this.logger.debug(
+    if (!parsed) {
+      this.logger.debug(
         `skipping handler with pattern: ${JSON.stringify(pattern)}`,
       );
+      return;
+    }
 
     if (!isEventHandler) throw new RPCNotSupported();
 
@@ -96,8 +98,7 @@ export class NSQStrategy extends Server implements CustomTransportStrategy {
 
   on<
     EventKey extends string = string,
-    // use same types as in parent class
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    // biome-ignore lint/complexity/noBannedTypes: `Server.on` declares its callback as a bare `Function`, and this override has to repeat that signature to stay assignable to it
     EventCallback extends Function = Function,
   >(event: EventKey, callback: EventCallback) {
     void this.readersSetDeferred.promise.then(() => {

@@ -1,13 +1,11 @@
 import { Controller, Inject, ModuleMetadata, Type } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { suite, test } from '@testdeck/jest';
 
 import { NSQPattern } from '../src';
 
-import { Base } from './base-suite';
+import { Base, useSuite } from './base-suite';
 
-@suite
-export class MsgPatternSender extends Base {
+class MsgPatternSender extends Base {
   patterns = [new NSQPattern('topic-msg', 'channel-msg')];
   private ctrl!: Type<{ emit(): Promise<void> }>;
 
@@ -29,8 +27,15 @@ export class MsgPatternSender extends Base {
     return { ...super.metadata, controllers: [TestController] };
   }
 
-  @test
-  async 'send should throw'() {
+  async expectEmitToReject() {
     await expect(this.app.get(this.ctrl).emit()).rejects.toBeTruthy();
   }
 }
+
+describe('MsgPatternSender', () => {
+  const getSuite = useSuite(() => new MsgPatternSender());
+
+  it('send should throw', async () => {
+    await getSuite().expectEmitToReject();
+  });
+});

@@ -46,7 +46,7 @@
     "@eslint/js": "^9.18.0",
     "@nestjs/common": "^11.0.5",
     "@nestjs/core": "^11.0.5",
-    "@nestjs/microservices": "^11.0.5",
+    "@nestjs/microservices": "^12.0.1",
     "@testdeck/jest": "^0.3.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.0.0",

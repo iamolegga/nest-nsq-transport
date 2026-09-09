@@ -51,7 +51,7 @@
     "@swc/core": "^1.16.1",
     "@types/node": "^26.4.0",
     "@types/nsqjs": "^0.12.4",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^5.0.0",
     "dotenv": "^17.0.0",
     "nsqjs": "^0.13.0",
     "reflect-metadata": "^0.2.2",
@@ -59,7 +59,7 @@
     "rxjs": "^7.8.2",
     "typescript": "^7.0.2",
     "unplugin-swc": "^1.5.11",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "peerDependencies": {
     "@nestjs/common": "^11.0.0 || ^12.0.0",

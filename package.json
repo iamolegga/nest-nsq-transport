@@ -52,7 +52,7 @@
     "@types/node": "^26.4.0",
     "@types/nsqjs": "^0.12.4",
     "@vitest/coverage-v8": "^5.0.0",
-    "dotenv": "^17.0.0",
+    "dotenv": "^18.0.1",
     "nsqjs": "^0.13.0",
     "reflect-metadata": "^0.2.2",
     "rimraf": "^6.1.3",
